@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory app:title="@string/ads_title">
+
+        <SwitchPreferenceCompat
+            app:key="isEnableRemoveBookshelfFloat"
+            app:title="@string/sw_bookshelf_float" />
+
+        <SwitchPreferenceCompat
+            app:key="isEnableRemoveBookshelfBottomAd"
+            app:title="@string/sw_bottom_ad" />
+
+        <SwitchPreferenceCompat
+            app:key="isEnableDisableAd"
+            app:title="@string/sw_disable_ad" />
+
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

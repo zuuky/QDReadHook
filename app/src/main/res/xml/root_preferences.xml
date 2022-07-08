@@ -1,18 +1,21 @@
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory app:title="@string/main_title">
 
         <EditTextPreference
+            android:defaultValue="com.qidian.QDReader"
             app:defaultValue="com.qidian.QDReader"
             app:key="packageName"
             app:title="@string/packageName"
-            android:defaultValue="com.qidian.QDReader"
             app:useSimpleSummaryProvider="true" />
+
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="@string/header">
+
+
+    <PreferenceCategory app:title="@string/function">
 
         <SwitchPreferenceCompat
             app:key="isEnableAutoSign"
@@ -27,13 +30,15 @@
             app:title="@string/sw_local_card" />
 
         <SwitchPreferenceCompat
-            app:key="isEnableRemoveBookshelfFloat"
-            app:title="@string/sw_bookshelf_float" />
+            app:key="isEnableHideBottomDot"
+            app:title="@string/sw_hide_bottom_dot" />
 
         <SwitchPreferenceCompat
-            app:key="isEnableRemoveBookshelfBottomAd"
-            app:title="@string/sw_bottom_ad" />
+            app:key="isEnableCloseQSNModeDialog"
+            app:title="@string/sw_close_qingshaonian_mode" />
+
 
     </PreferenceCategory>
+
 
 </PreferenceScreen>

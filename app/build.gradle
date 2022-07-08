@@ -90,6 +90,13 @@ android {
             useLegacyPackaging true
         }
     }
+
+    // 启用ViewBinding
+    buildFeatures {
+        viewBinding  = true
+    }
+
+
 }
 
 dependencies {

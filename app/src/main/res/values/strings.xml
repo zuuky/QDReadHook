@@ -2,16 +2,49 @@
     <string name="app_name">QD</string>
     <!-- Preference Titles -->
     <string name="main_title">主要</string>
-    <string name="header">功能</string>
+    <!--包名设置-->
     <string name="packageName">包名设置</string>
+    <!-- 功能 -->
+    <string name="function">功能相关</string>
+    <!--启用自动签到-->
     <string name="sw_autosignin">自动签到</string>
-    <!--自动关闭书架广告弹框-->
     <!--启用旧版布局-->
     <string name="sw_old_layout">启用旧版布局</string>
     <!--本地至尊卡-->
     <string name="sw_local_card">启用本地至尊卡</string>
+    <!--启用隐藏底部小红点-->
+    <string name="sw_hide_bottom_dot">启用隐藏底部小红点</string>
+    <!--启用关闭青少年模式弹框-->
+    <string name="sw_close_qingshaonian_mode">启用关闭青少年模式弹框</string>
+
+
+    <!--广告相关-->
+    <string name="ads_title">广告相关</string>
     <!--去书架右下角浮窗-->
     <string name="sw_bookshelf_float">去书架右下角浮窗</string>
     <!--去除底部导航栏中心广告-->
     <string name="sw_bottom_ad">去除底部导航栏中心广告</string>
+    <!--禁用获取广告-->
+    <string name="sw_disable_ad">禁用tx广告</string>
+
+    <!-- 闪屏页相关 -->
+    <string name="splash_title">闪屏页相关</string>
+    <!--启用闪屏页-->
+    <string name="sw_enable_splash">启用闪屏页</string>
+    <!--自定义闪屏页-->
+    <string name="sw_custom_splash">自定义闪屏页</string>
+    <!--自定义闪屏页图片-->
+    <string name="custom_splash_image">自定义闪屏页图片地址</string>
+    <!--自定义闪屏页图片说明-->
+    <string name="custom_splash_image_hint">填入图片所在绝对路径,如失败请给起点存储权限,或检查是否填写正确,留空默认</string>
+    <!--自定义闪屏页类型-->
+    <string name="custom_splash_image_type">自定义闪屏页类型</string>
+    <!--自定义闪屏页启用显示全部按钮-->
+    <string name="sw_show_all_btn">自定义闪屏页启用显示全部按钮</string>
+    <!--自定义跳转到指定书详情页-->
+    <string name="custom_book_detail">闪屏页自定义跳转到指定书详情页</string>
+    <!--自定义跳转到指定书详情页说明-->
+    <string name="custom_book_detail_hint">填入书籍的BookId,详情页分享链接里面"bookid="后面到"&amp;"前那串数字就是了</string>
+
+
 </resources>

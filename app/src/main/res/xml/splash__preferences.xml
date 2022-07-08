@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <PreferenceCategory app:title="@string/splash_title">
+
+
+        <SwitchPreferenceCompat
+            android:key="isEnableSplash"
+            android:title="@string/sw_enable_splash" />
+
+        <SwitchPreferenceCompat
+            android:dependency="isEnableSplash"
+            android:key="isEnableCustomSplash"
+            android:title="@string/sw_custom_splash" />
+
+        <SwitchPreferenceCompat
+            android:dependency="isEnableCustomSplash"
+            android:key="isEnableCustomSplashImageShowAllButton"
+            android:title="@string/sw_show_all_btn" />
+
+        <EditTextPreference
+            android:dependency="isEnableCustomSplashImageShowAllButton"
+            android:key="customBookId"
+            android:title="@string/custom_book_detail"
+            android:summary="@string/custom_book_detail_hint" />
+
+        <ListPreference
+            android:dependency="isEnableCustomSplash"
+            android:key="customSplashImageType"
+            android:title="@string/custom_splash_image_type"
+            android:defaultValue="0"
+            android:entries="@array/custom_splash_image_type_entries"
+            android:entryValues="@array/custom_splash_image_type_values" />
+
+        <EditTextPreference
+            android:dependency="isEnableCustomSplash"
+            android:key="customSplashImageFilePath"
+            android:title="@string/custom_splash_image"
+            app:summary="@string/custom_splash_image_hint" />
+
+
+    </PreferenceCategory>
+
+
+</PreferenceScreen>
