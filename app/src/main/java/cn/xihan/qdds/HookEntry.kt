@@ -44,7 +44,7 @@ class HookEntry : IYukiHookXposedInit {
              * 是否自动签到
              */
             if (prefs.getBoolean("isEnableAutoSign")) {
-                if (prefs.getBoolean("isEnableOldLayout", false)) {
+                if (prefs.getBoolean("isEnableOldLayout")) {
                     classNameAndMethodNameEntity.getOldLayoutSignInClassNameAndMethodName()?.let {
                         /**
                          * 旧版布局的自动签到
@@ -263,7 +263,6 @@ class HookEntry : IYukiHookXposedInit {
                                         name = it[3]
                                     }
                                     afterHook {
-
 
                                         val btnSkip = getView<Button>(instance, it[4])
                                         btnSkip?.visibility = View.GONE
