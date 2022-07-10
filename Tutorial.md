@@ -15,8 +15,8 @@
 
 ## 修改后截图
 
-![图17](https://github.com/xihan123/QDReadHook/blob/master/Screenshots/Tutorial/18.jpg?raw=true)
-![图18](https://github.com/xihan123/QDReadHook/blob/master/Screenshots/Tutorial/19.jpg?raw=true)
+![图18](https://github.com/xihan123/QDReadHook/blob/master/Screenshots/Tutorial/18.jpg?raw=true)
+![图19](https://github.com/xihan123/QDReadHook/blob/master/Screenshots/Tutorial/19.jpg?raw=true)
 ![图20](https://github.com/xihan123/QDReadHook/blob/master/Screenshots/Tutorial/20.jpg?raw=true)
 
 ## 目录
