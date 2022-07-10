@@ -26,6 +26,9 @@
 * [本地至尊卡](#本地至尊卡)
 * [去除书架右下角浮窗](#去除书架右下角浮窗)
 * [去除底部导航栏中心广告](#去除底部导航栏中心广告)
+* [去除TX广告系](#去除TX广告系)
+* [去除底部小红点](#去除底部小红点)
+* [闪屏页相关](#闪屏页相关)
 * [反射方法](#反射方法)
 * [开源地址](#Xposed模块开源)
 
@@ -260,7 +263,7 @@ public final class b {
 
 * 3.通过分析启动任务，看名字发现了相关类,把 **create** 置空即可，实测相关日志减少。此方法不通用
 
-![图23](https://github.com/xihan123/QDReadHook/blob/master/Screenshots/Tutorial/23.jpg?raw=true)
+![图23](https://github.com/xihan123/QDReadHook/blob/master/Screenshots/Tutorial/23.png?raw=true)
 
 ```Java
 package com.qidian.QDReader.start;
