@@ -245,8 +245,6 @@ class HookEntry : IYukiHookXposedInit {
                             intercept()
                         }
                     }
-
-
                 }
             }
 
@@ -598,7 +596,7 @@ inline fun <reified T> getParam(param: Any, name: String): T? {
 fun getSystemContext(): Context {
     val activityThreadClass = findClass("android.app.ActivityThread", null)
     val activityThread = callStaticMethod(activityThreadClass, "currentActivityThread")
-    val context = callMethod(activityThread, "getSystemContext") as Context?
+    val context = callMethod(activityThread, "getSystemContext") as? Context
     return context ?: throw Error("Failed to get system context.")
 }
 
