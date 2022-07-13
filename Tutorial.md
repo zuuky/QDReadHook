@@ -329,7 +329,7 @@ public final class AsyncMainGameADSDKTask extends QDDefaultAsyncMainTask {
 ```
 
 ![图21](https://github.com/xihan123/QDReadHook/blob/master/Screenshots/Tutorial/21.jpg?raw=true)
-![图22](https://github.com/xihan123/QDReadHook/blob/master/Screenshots/Tutorial/22.jpg?raw=true)
+![图22](https://github.com/xihan123/QDReadHook/blob/master/Screenshots/Tutorial/22.png?raw=true)
 
 ---
 

@@ -9,11 +9,9 @@ import com.highcapable.yukihookapi.YukiHookAPI
 import com.highcapable.yukihookapi.annotation.xposed.InjectYukiHookWithXposed
 import com.highcapable.yukihookapi.hook.factory.current
 import com.highcapable.yukihookapi.hook.log.loggerE
+import com.highcapable.yukihookapi.hook.type.android.ActivityClass
 import com.highcapable.yukihookapi.hook.type.android.ContextClass
-import com.highcapable.yukihookapi.hook.type.java.BooleanType
-import com.highcapable.yukihookapi.hook.type.java.IntType
-import com.highcapable.yukihookapi.hook.type.java.LongType
-import com.highcapable.yukihookapi.hook.type.java.StringType
+import com.highcapable.yukihookapi.hook.type.java.*
 import com.highcapable.yukihookapi.hook.xposed.proxy.IYukiHookXposedInit
 import de.robv.android.xposed.XSharedPreferences
 import de.robv.android.xposed.XposedHelpers.*
@@ -170,7 +168,15 @@ class HookEntry : IYukiHookXposedInit {
                                         instance, it[3]
                                     )
                                     imgAdIconClose?.visibility = View.GONE
+                                    val layoutImgAdIcon = getView<LinearLayout>(
+                                        instance, it[4]
+                                    )
+                                    layoutImgAdIcon?.visibility = View.GONE
 
+                                    val imgBookShelfActivityIcon = getView<ImageView>(
+                                        instance, it[5]
+                                    )
+                                    imgBookShelfActivityIcon?.visibility = View.GONE
 
                                 }
 
@@ -178,6 +184,7 @@ class HookEntry : IYukiHookXposedInit {
                             }
 
                         }
+
                     } ?: loggerE(msg = "版本号为: $versionCode")
 
 
@@ -369,17 +376,50 @@ class HookEntry : IYukiHookXposedInit {
              * 是启用关闭青少年模式弹框
              */
             if (prefs.getBoolean("isEnableCloseQSNModeDialog")) {
-                classNameAndMethodNameEntity.getIsEnableCloseTeenagerModeClassNameAndMethodName()?.let{
-                    findClass(it[0]).hook {
-                        injectMember {
-                            method {
-                                name = it[1]
-                                superClass()
+                classNameAndMethodNameEntity.getIsEnableCloseTeenagerModeClassNameAndMethodName()
+                    ?.let {
+                        findClass(it[0]).hook {
+                            injectMember {
+                                method {
+                                    name = it[1]
+                                    superClass()
+                                }
+                                intercept()
                             }
-                            intercept()
                         }
+
+                        findClass(it[2]).hook {
+                            injectMember{
+                                method{
+                                    name = it[3]
+                                    param(IntType)
+                                    returnType = BooleanType
+                                }
+                                replaceToFalse()
+                            }
+
+                            injectMember {
+                                method {
+                                    name = it[4]
+                                    param(ActivityClass)
+                                    returnType = UnitType
+                                }
+                                intercept()
+                            }
+                        }
+
+                        findClass(it[5]).hook {
+                            injectMember {
+                                method {
+                                    name = it[6]
+                                    superClass()
+                                }
+                                intercept()
+                            }
+                        }
+
+
                     }
-                }
 
             }
 
@@ -482,6 +522,8 @@ class HookEntry : IYukiHookXposedInit {
                     "loadBookShelfAd",
                     "onViewInject",
                     "imgAdIconClose",
+                    "layoutImgAdIcon",
+                    "imgBookShelfActivityIcon"
                 )
                 else -> null
             }
@@ -493,7 +535,8 @@ class HookEntry : IYukiHookXposedInit {
         fun getIsEnableRemoveBookshelfBottomAdClassNameAndMethodName(): Array<String>? {
             return when (versionCode) {
                 in 758..760 -> arrayOf(
-                    "com.qidian.QDReader.ui.activity.MainGroupActivity\$t", "c"
+                    "com.qidian.QDReader.ui.activity.MainGroupActivity\$t",
+                    "c"
                 )
                 else -> null
             }
@@ -558,7 +601,12 @@ class HookEntry : IYukiHookXposedInit {
             return when (versionCode) {
                 in 758..760 -> arrayOf(
                     "com.qidian.QDReader.bll.manager.QDTeenagerManager\$a",
-                    "getConfig"
+                    "getConfig",
+                    "com.qidian.QDReader.bll.manager.QDTeenagerManager",
+                    "isTeenLimitShouldShow",
+                    "judgeTeenUserTimeLimit\$lambda-3\$lambda-2",
+                    "com.qidian.QDReader.bll.helper.v1",
+                    "show"
                 )
                 else -> null
             }
