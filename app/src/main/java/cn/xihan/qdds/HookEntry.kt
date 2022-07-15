@@ -43,7 +43,7 @@ class HookEntry : IYukiHookXposedInit {
              */
             if (prefs.getBoolean("isEnableAutoSign")) {
                 if (prefs.getBoolean("isEnableOldLayout")) {
-                    classNameAndMethodNameEntity.getOldLayoutSignInClassNameAndMethodName()?.let {
+                    classNameAndMethodNameEntity.getOldLayoutSignInClassNameAndMethodName().runIfNotEmpty{
                         /**
                          * 旧版布局的自动签到
                          */
@@ -69,7 +69,7 @@ class HookEntry : IYukiHookXposedInit {
                         }
                     }
                 } else {
-                    classNameAndMethodNameEntity.getNewLayoutSignInClassNameAndMethodName()?.let {
+                    classNameAndMethodNameEntity.getNewLayoutSignInClassNameAndMethodName().runIfNotEmpty {
                         /**
                          * 新版布局的自动签到
                          */
@@ -107,7 +107,7 @@ class HookEntry : IYukiHookXposedInit {
              * 是否启用旧版布局
              */
             if (prefs.getBoolean("isEnableOldLayout")) {
-                classNameAndMethodNameEntity.getIsEnableOldLayoutClassNameAndMethodName()?.let {
+                classNameAndMethodNameEntity.getIsEnableOldLayoutClassNameAndMethodName().runIfNotEmpty {
                     findClass(it[0]).hook {
                         injectMember {
                             method {
@@ -124,7 +124,7 @@ class HookEntry : IYukiHookXposedInit {
              * 是否启用本地至尊卡
              */
             if (prefs.getBoolean("isEnableLocalCard")) {
-                classNameAndMethodNameEntity.getIsEnableLocalCardClassNameAndMethodName()?.let {
+                classNameAndMethodNameEntity.getIsEnableLocalCardClassNameAndMethodName().runIfNotEmpty {
                     findClass(it[0]).hook {
                         injectMember {
                             method {
@@ -148,7 +148,7 @@ class HookEntry : IYukiHookXposedInit {
              */
             if (prefs.getBoolean("isEnableRemoveBookshelfFloat")) {
                 classNameAndMethodNameEntity.getIsEnableRemoveBookshelfFloatClassNameAndMethodName()
-                    ?.let {
+                    .runIfNotEmpty {
                         findClass(it[0]).hook {
                             injectMember {
                                 method {
@@ -185,7 +185,7 @@ class HookEntry : IYukiHookXposedInit {
 
                         }
 
-                    } ?: loggerE(msg = "版本号为: $versionCode")
+                    }
 
 
             }
@@ -195,7 +195,7 @@ class HookEntry : IYukiHookXposedInit {
              */
             if (prefs.getBoolean("isEnableRemoveBookshelfBottomAd")) {
                 classNameAndMethodNameEntity.getIsEnableRemoveBookshelfBottomAdClassNameAndMethodName()
-                    ?.let {
+                    .runIfNotEmpty {
                         findClass(it[0]).hook {
                             injectMember {
                                 method {
@@ -212,7 +212,7 @@ class HookEntry : IYukiHookXposedInit {
              * 是否禁用广告
              */
             if (prefs.getBoolean("isEnableDisableAd")) {
-                classNameAndMethodNameEntity.getIsEnableRemoveAdClassNameAndMethodName()?.let {
+                classNameAndMethodNameEntity.getIsEnableRemoveAdClassNameAndMethodName().runIfNotEmpty {
                     findClass(it[0]).hook {
                         injectMember {
                             method {
@@ -260,7 +260,7 @@ class HookEntry : IYukiHookXposedInit {
              */
             if (prefs.getBoolean("isEnableSplash")) {
                 if (prefs.getBoolean("isEnableCustomSplash")) {
-                    classNameAndMethodNameEntity.getSplashClassNameAndMethodName()?.let {
+                    classNameAndMethodNameEntity.getSplashClassNameAndMethodName().runIfNotEmpty {
                         findClass(it[2]).hook {
                             if (!prefs.getBoolean("isEnableCustomSplashImageShowAllButton")) {
                                 injectMember {
@@ -323,7 +323,7 @@ class HookEntry : IYukiHookXposedInit {
                     }
                 }
             } else {
-                classNameAndMethodNameEntity.getSplashClassNameAndMethodName()?.let {
+                classNameAndMethodNameEntity.getSplashClassNameAndMethodName().runIfNotEmpty {
                     findClass(it[0]).hook {
                         injectMember {
                             method {
@@ -358,7 +358,7 @@ class HookEntry : IYukiHookXposedInit {
              */
             if (prefs.getBoolean("isEnableHideBottomDot")) {
                 classNameAndMethodNameEntity.getIsEnableHideBottomRedDotClassNameAndMethodName()
-                    ?.let {
+                    .runIfNotEmpty {
                         findClass(it[0]).hook {
                             injectMember {
                                 method {
@@ -377,7 +377,7 @@ class HookEntry : IYukiHookXposedInit {
              */
             if (prefs.getBoolean("isEnableCloseQSNModeDialog")) {
                 classNameAndMethodNameEntity.getIsEnableCloseTeenagerModeClassNameAndMethodName()
-                    ?.let {
+                    .runIfNotEmpty {
                         findClass(it[0]).hook {
                             injectMember {
                                 method {
@@ -389,8 +389,8 @@ class HookEntry : IYukiHookXposedInit {
                         }
 
                         findClass(it[2]).hook {
-                            injectMember{
-                                method{
+                            injectMember {
+                                method {
                                     name = it[3]
                                     param(IntType)
                                     returnType = BooleanType
@@ -460,7 +460,7 @@ class HookEntry : IYukiHookXposedInit {
          */
         fun getOldLayoutSignInClassNameAndMethodName(): Array<String>? {
             return when (versionCode) {
-                in 758..760 -> arrayOf(
+                in 758..768 -> arrayOf(
                     "com.qidian.QDReader.ui.view.bookshelfview.CheckInReadingTimeView",
                     "S",
                     "m",
@@ -475,7 +475,7 @@ class HookEntry : IYukiHookXposedInit {
          */
         fun getNewLayoutSignInClassNameAndMethodName(): Array<String>? {
             return when (versionCode) {
-                in 758..760 -> arrayOf(
+                in 758..768 -> arrayOf(
                     "com.qidian.QDReader.ui.view.bookshelfview.CheckInReadingTimeViewNew",
                     "E",
                     "s",
@@ -490,7 +490,7 @@ class HookEntry : IYukiHookXposedInit {
          */
         fun getIsEnableOldLayoutClassNameAndMethodName(): Array<String>? {
             return when (versionCode) {
-                in 758..760 -> arrayOf(
+                in 758..768 -> arrayOf(
                     "com.qidian.QDReader.component.config.QDAppConfigHelper\$Companion",
                     "getBookShelfNewStyle"
                 )
@@ -503,7 +503,7 @@ class HookEntry : IYukiHookXposedInit {
          */
         fun getIsEnableLocalCardClassNameAndMethodName(): Array<String>? {
             return when (versionCode) {
-                in 758..760 -> arrayOf(
+                in 758..800 -> arrayOf(
                     "com.qidian.QDReader.repository.entity.UserAccountDataBean\$MemberBean",
                     "getMemberType",
                     "getIsMember"
@@ -517,7 +517,7 @@ class HookEntry : IYukiHookXposedInit {
          */
         fun getIsEnableRemoveBookshelfFloatClassNameAndMethodName(): Array<String>? {
             return when (versionCode) {
-                in 758..760 -> arrayOf(
+                in 758..800 -> arrayOf(
                     "com.qidian.QDReader.ui.fragment.QDBookShelfPagerFragment",
                     "loadBookShelfAd",
                     "onViewInject",
@@ -534,7 +534,7 @@ class HookEntry : IYukiHookXposedInit {
          */
         fun getIsEnableRemoveBookshelfBottomAdClassNameAndMethodName(): Array<String>? {
             return when (versionCode) {
-                in 758..760 -> arrayOf(
+                in 758..800 -> arrayOf(
                     "com.qidian.QDReader.ui.activity.MainGroupActivity\$t",
                     "c"
                 )
@@ -547,7 +547,7 @@ class HookEntry : IYukiHookXposedInit {
          */
         fun getIsEnableRemoveAdClassNameAndMethodName(): Array<String>? {
             return when (versionCode) {
-                in 758..760 -> arrayOf(
+                in 758..800 -> arrayOf(
                     "com.qq.e.comm.constants.CustomPkgConstants",
                     "getAssetPluginName",
                     "com.qq.e.comm.b",
@@ -565,7 +565,7 @@ class HookEntry : IYukiHookXposedInit {
          */
         fun getSplashClassNameAndMethodName(): Array<String>? {
             return when (versionCode) {
-                in 758..760 -> arrayOf(
+                in 758..800 -> arrayOf(
                     "com.qidian.QDReader.bll.splash.SplashManager",
                     "k",
                     "com.qidian.QDReader.ui.activity.SplashImageActivity",
@@ -590,6 +590,10 @@ class HookEntry : IYukiHookXposedInit {
                     "com.qidian.QDReader.ui.widget.maintab.a",
                     "h"
                 )
+                768 -> arrayOf(
+                    "com.qidian.QDReader.ui.widget.maintab.e",
+                    "h"
+                )
                 else -> null
             }
         }
@@ -599,7 +603,7 @@ class HookEntry : IYukiHookXposedInit {
          */
         fun getIsEnableCloseTeenagerModeClassNameAndMethodName(): Array<String>? {
             return when (versionCode) {
-                in 758..760 -> arrayOf(
+                in 758..800 -> arrayOf(
                     "com.qidian.QDReader.bll.manager.QDTeenagerManager\$a",
                     "getConfig",
                     "com.qidian.QDReader.bll.manager.QDTeenagerManager",
@@ -683,5 +687,15 @@ fun printCallStack(className: String = "") {
     loggerE(msg = "Dump Stack: ---------------end----------------")
 }
 
+/**
+ * 数组拓展方法 如果不为空则运行 否则打印日志
+ */
+fun <T> Array<T>?.runIfNotEmpty(block: (Array<T>) -> Unit) {
+    if (this.isNullOrEmpty()) {
+        loggerE(msg = "不支持的版本号为: ${HookEntry.versionCode}")
+    } else {
+        block(this)
+    }
+}
 
 
