@@ -9,8 +9,8 @@ import com.highcapable.yukihookapi.YukiHookAPI
 import com.highcapable.yukihookapi.annotation.xposed.InjectYukiHookWithXposed
 import com.highcapable.yukihookapi.hook.factory.current
 import com.highcapable.yukihookapi.hook.log.loggerE
+import com.highcapable.yukihookapi.hook.param.PackageParam
 import com.highcapable.yukihookapi.hook.type.android.ActivityClass
-import com.highcapable.yukihookapi.hook.type.android.ContextClass
 import com.highcapable.yukihookapi.hook.type.java.*
 import com.highcapable.yukihookapi.hook.xposed.proxy.IYukiHookXposedInit
 import de.robv.android.xposed.XSharedPreferences
@@ -38,390 +38,23 @@ class HookEntry : IYukiHookXposedInit {
 
         loadApp(name = QD_PACKAGE_NAME) {
 
-            /**
-             * 是否自动签到
-             */
-            if (prefs.getBoolean("isEnableAutoSign")) {
-                if (prefs.getBoolean("isEnableOldLayout")) {
-                    classNameAndMethodNameEntity.getOldLayoutSignInClassNameAndMethodName().runIfNotEmpty{
-                        /**
-                         * 旧版布局的自动签到
-                         */
-                        findClass(it[0]).hook {
-                            injectMember {
-                                method {
-                                    name = it[1]
-                                }
-                                afterHook {
-                                    val m = getView<TextView>(
-                                        instance, it[2]
-                                    )
-                                    val l = getView<LinearLayout>(
-                                        instance, it[3]
-                                    )
-                                    m?.let { mtv ->
-                                        if (mtv.text == "签到") {
-                                            l?.performClick()
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    classNameAndMethodNameEntity.getNewLayoutSignInClassNameAndMethodName().runIfNotEmpty {
-                        /**
-                         * 新版布局的自动签到
-                         */
-                        findClass(it[0]).hook {
-                            injectMember {
-                                method {
-                                    name = it[1]
-                                }
-                                afterHook {
-                                    val s = getView<LinearLayout>(
-                                        instance, it[2]
-                                    )
-                                    val qd = getParam<Any>(
-                                        instance, it[2]
-                                    )
-                                    qd?.let { qdv ->
-                                        val e = getView<TextView>(
-                                            qdv, it[3]
-                                        )
-                                        e?.let { etv ->
-                                            if (etv.text == "签到") {
-                                                s?.performClick()
-                                            }
-                                        }
-                                    }
-                                }
-                            }
+            autoSignIn(versionCode)
 
-                        }
-                    }
-                }
-            }
+            enableOldLayout(versionCode)
 
-            /**
-             * 是否启用旧版布局
-             */
-            if (prefs.getBoolean("isEnableOldLayout")) {
-                classNameAndMethodNameEntity.getIsEnableOldLayoutClassNameAndMethodName().runIfNotEmpty {
-                    findClass(it[0]).hook {
-                        injectMember {
-                            method {
-                                name = it[1]
-                            }
-                            replaceToFalse()
-                        }
-                    }
-                }
+            enableLocalCard(versionCode)
 
-            }
+            removeBookshelfFloatWindow(versionCode)
 
-            /**
-             * 是否启用本地至尊卡
-             */
-            if (prefs.getBoolean("isEnableLocalCard")) {
-                classNameAndMethodNameEntity.getIsEnableLocalCardClassNameAndMethodName().runIfNotEmpty {
-                    findClass(it[0]).hook {
-                        injectMember {
-                            method {
-                                name = it[1]
-                            }
-                            replaceTo(2)
-                        }
+            removeBottomNavigationCenterAd(versionCode)
 
-                        injectMember {
-                            method {
-                                name = it[2]
-                            }
-                            replaceTo(1)
-                        }
-                    }
-                }
-            }
+            disableAd(versionCode)
 
-            /**
-             * 是否移除书架右下角浮窗
-             */
-            if (prefs.getBoolean("isEnableRemoveBookshelfFloat")) {
-                classNameAndMethodNameEntity.getIsEnableRemoveBookshelfFloatClassNameAndMethodName()
-                    .runIfNotEmpty {
-                        findClass(it[0]).hook {
-                            injectMember {
-                                method {
-                                    name = it[1]
-                                }
-                                intercept()
-                            }
+            splashPage(versionCode)
 
-                            injectMember {
-                                method {
-                                    name = it[2]
-                                    param(View::class.java)
-                                }
+            hideBottomRedDot(versionCode)
 
-                                afterHook {
-                                    val imgAdIconClose = getView<ImageView>(
-                                        instance, it[3]
-                                    )
-                                    imgAdIconClose?.visibility = View.GONE
-                                    val layoutImgAdIcon = getView<LinearLayout>(
-                                        instance, it[4]
-                                    )
-                                    layoutImgAdIcon?.visibility = View.GONE
-
-                                    val imgBookShelfActivityIcon = getView<ImageView>(
-                                        instance, it[5]
-                                    )
-                                    imgBookShelfActivityIcon?.visibility = View.GONE
-
-                                }
-
-
-                            }
-
-                        }
-
-                    }
-
-
-            }
-
-            /**
-             * 是否去除底部导航栏中心广告
-             */
-            if (prefs.getBoolean("isEnableRemoveBookshelfBottomAd")) {
-                classNameAndMethodNameEntity.getIsEnableRemoveBookshelfBottomAdClassNameAndMethodName()
-                    .runIfNotEmpty {
-                        findClass(it[0]).hook {
-                            injectMember {
-                                method {
-                                    name = it[1]
-                                }
-                                intercept()
-                            }
-                        }
-                    }
-
-            }
-
-            /**
-             * 是否禁用广告
-             */
-            if (prefs.getBoolean("isEnableDisableAd")) {
-                classNameAndMethodNameEntity.getIsEnableRemoveAdClassNameAndMethodName().runIfNotEmpty {
-                    findClass(it[0]).hook {
-                        injectMember {
-                            method {
-                                name = it[1]
-                            }
-                            replaceTo("")
-                        }
-                    }
-
-                    findClass(it[2]).hook {
-                        injectMember {
-                            method {
-                                name = it[3]
-                                param(ContextClass)
-                                returnType = BooleanType
-                            }
-                            replaceToFalse()
-                        }
-                    }
-
-                    findClass(it[4]).hook {
-                        injectMember {
-                            method {
-                                name = it[5]
-                                returnType = StringType
-                            }
-                            intercept()
-                        }
-                    }
-
-                    findClass(it[6]).hook {
-                        injectMember {
-                            method {
-                                name = it[5]
-                                returnType = StringType
-                            }
-                            intercept()
-                        }
-                    }
-                }
-            }
-
-            /**
-             * 是否启用闪屏页
-             */
-            if (prefs.getBoolean("isEnableSplash")) {
-                if (prefs.getBoolean("isEnableCustomSplash")) {
-                    classNameAndMethodNameEntity.getSplashClassNameAndMethodName().runIfNotEmpty {
-                        findClass(it[2]).hook {
-                            if (!prefs.getBoolean("isEnableCustomSplashImageShowAllButton")) {
-                                injectMember {
-                                    method {
-                                        name = it[3]
-                                    }
-                                    afterHook {
-
-                                        val btnSkip = getView<Button>(instance, it[4])
-                                        btnSkip?.visibility = View.GONE
-                                        val ivTop = getView<ImageView>(instance, it[5])
-                                        ivTop?.visibility = View.GONE
-                                        val layoutShadow = getParam<RelativeLayout>(instance, it[6])
-                                        layoutShadow?.visibility = View.GONE
-                                        val mGotoActivityShimmer =
-                                            getView<FrameLayout>(instance, it[7])
-                                        mGotoActivityShimmer?.visibility = View.GONE
-
-                                    }
-                                }
-
-                            }
-                            injectMember {
-                                method {
-                                    name = it[8]
-                                    param(
-                                        "com.qidian.QDReader.ui.activity.SplashActivity".clazz,
-                                        StringType,
-                                        StringType,
-                                        LongType,
-                                        IntType
-                                    )
-                                }
-
-                                beforeHook {
-                                    val customSplashImageFilePath =
-                                        prefs.getString("customSplashImageFilePath")
-                                    if (customSplashImageFilePath.isNotBlank()) {
-                                        args(index = 1).set(customSplashImageFilePath)
-                                    }
-                                    val customBookId = prefs.getString("customBookId")
-                                    if (customBookId.isNotBlank()) {
-                                        args(index = 2).set("QDReader://ShowBook/$customBookId")
-                                    }
-
-                                    args(index = 4).set(prefs.getInt("customSplashImageType", 0))
-                                }
-
-
-
-
-                                afterHook {
-                                    // 打印传入的参数
-                                    loggerE(msg = " \nargs[1]: ${args[1] as String} \nargs[2]: ${args[2] as String} \nargs[3]: ${args[3] as Long} \nargs[4]: ${args[4] as Int}")
-                                }
-
-
-                            }
-                        }
-                    }
-                }
-            } else {
-                classNameAndMethodNameEntity.getSplashClassNameAndMethodName().runIfNotEmpty {
-                    findClass(it[0]).hook {
-                        injectMember {
-                            method {
-                                name = it[1]
-                            }
-                            intercept()
-                        }
-                    }
-
-                    findClass(it[2]).hook {
-                        injectMember {
-                            method {
-                                name = it[9]
-                                param(StringType)
-                            }
-                            afterHook {
-                                val mSplashHelper = getParam<Any>(instance, "mSplashHelper")
-                                mSplashHelper?.current {
-                                    method {
-                                        name = "e"
-                                    }.call()
-
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            /**
-             * 是启用隐藏底部小红点
-             */
-            if (prefs.getBoolean("isEnableHideBottomDot")) {
-                classNameAndMethodNameEntity.getIsEnableHideBottomRedDotClassNameAndMethodName()
-                    .runIfNotEmpty {
-                        findClass(it[0]).hook {
-                            injectMember {
-                                method {
-                                    name = it[1]
-                                    returnType = IntType
-                                }
-                                replaceTo(1)
-                            }
-                        }
-
-                    }
-            }
-
-            /**
-             * 是启用关闭青少年模式弹框
-             */
-            if (prefs.getBoolean("isEnableCloseQSNModeDialog")) {
-                classNameAndMethodNameEntity.getIsEnableCloseTeenagerModeClassNameAndMethodName()
-                    .runIfNotEmpty {
-                        findClass(it[0]).hook {
-                            injectMember {
-                                method {
-                                    name = it[1]
-                                    superClass()
-                                }
-                                intercept()
-                            }
-                        }
-
-                        findClass(it[2]).hook {
-                            injectMember {
-                                method {
-                                    name = it[3]
-                                    param(IntType)
-                                    returnType = BooleanType
-                                }
-                                replaceToFalse()
-                            }
-
-                            injectMember {
-                                method {
-                                    name = it[4]
-                                    param(ActivityClass)
-                                    returnType = UnitType
-                                }
-                                intercept()
-                            }
-                        }
-
-                        findClass(it[5]).hook {
-                            injectMember {
-                                method {
-                                    name = it[6]
-                                    superClass()
-                                }
-                                intercept()
-                            }
-                        }
-
-
-                    }
-
-            }
+            removeQSNYDialog(versionCode)
 
         }
 
@@ -440,183 +73,12 @@ class HookEntry : IYukiHookXposedInit {
 
         val versionCode by lazy { getApplicationVersionCode(QD_PACKAGE_NAME) }
 
-        val classNameAndMethodNameEntity by lazy { ClassNameAndMethodNameEntity(versionCode) }
-
         fun getPref(): SharedPreferences? {
             val pref = XSharedPreferences(BuildConfig.APPLICATION_ID)
             return if (pref.file.canRead()) pref else null
         }
 
     }
-
-    /**
-     * 返回类名和方法名
-     */
-    data class ClassNameAndMethodNameEntity(var versionCode: Int) {
-
-
-        /**
-         * 根据版本号获取旧版布局自动签到类名方法名字段名数组
-         */
-        fun getOldLayoutSignInClassNameAndMethodName(): Array<String>? {
-            return when (versionCode) {
-                in 758..768 -> arrayOf(
-                    "com.qidian.QDReader.ui.view.bookshelfview.CheckInReadingTimeView",
-                    "S",
-                    "m",
-                    "l"
-                )
-                else -> null
-            }
-        }
-
-        /**
-         * 根据版本号获取新版布局自动签到类名方法名字段名数组
-         */
-        fun getNewLayoutSignInClassNameAndMethodName(): Array<String>? {
-            return when (versionCode) {
-                in 758..768 -> arrayOf(
-                    "com.qidian.QDReader.ui.view.bookshelfview.CheckInReadingTimeViewNew",
-                    "E",
-                    "s",
-                    "e"
-                )
-                else -> null
-            }
-        }
-
-        /**
-         * 根据版本号获取是否启用旧版布局的类名方法名字段名数组
-         */
-        fun getIsEnableOldLayoutClassNameAndMethodName(): Array<String>? {
-            return when (versionCode) {
-                in 758..768 -> arrayOf(
-                    "com.qidian.QDReader.component.config.QDAppConfigHelper\$Companion",
-                    "getBookShelfNewStyle"
-                )
-                else -> null
-            }
-        }
-
-        /**
-         * 根据版本号获取是否启用本地至尊卡的类名方法名字段名数组
-         */
-        fun getIsEnableLocalCardClassNameAndMethodName(): Array<String>? {
-            return when (versionCode) {
-                in 758..800 -> arrayOf(
-                    "com.qidian.QDReader.repository.entity.UserAccountDataBean\$MemberBean",
-                    "getMemberType",
-                    "getIsMember"
-                )
-                else -> null
-            }
-        }
-
-        /**
-         * 根据版本号获取是否移除书架右下角浮窗的类名方法名字段名数组
-         */
-        fun getIsEnableRemoveBookshelfFloatClassNameAndMethodName(): Array<String>? {
-            return when (versionCode) {
-                in 758..800 -> arrayOf(
-                    "com.qidian.QDReader.ui.fragment.QDBookShelfPagerFragment",
-                    "loadBookShelfAd",
-                    "onViewInject",
-                    "imgAdIconClose",
-                    "layoutImgAdIcon",
-                    "imgBookShelfActivityIcon"
-                )
-                else -> null
-            }
-        }
-
-        /**
-         * 根据版本号获取是否移除底部导航栏中心广告的类名方法名字段名数组
-         */
-        fun getIsEnableRemoveBookshelfBottomAdClassNameAndMethodName(): Array<String>? {
-            return when (versionCode) {
-                in 758..800 -> arrayOf(
-                    "com.qidian.QDReader.ui.activity.MainGroupActivity\$t",
-                    "c"
-                )
-                else -> null
-            }
-        }
-
-        /**
-         * 根据版本号获取是否启用禁止广告的类名方法名字段名数组
-         */
-        fun getIsEnableRemoveAdClassNameAndMethodName(): Array<String>? {
-            return when (versionCode) {
-                in 758..800 -> arrayOf(
-                    "com.qq.e.comm.constants.CustomPkgConstants",
-                    "getAssetPluginName",
-                    "com.qq.e.comm.b",
-                    "a",
-                    "com.qidian.QDReader.start.AsyncMainGDTTask",
-                    "create",
-                    "com.qidian.QDReader.start.AsyncMainGameADSDKTask"
-                )
-                else -> null
-            }
-        }
-
-        /**
-         * 根据版本号获取闪屏页相关类名方法名字段名数组
-         */
-        fun getSplashClassNameAndMethodName(): Array<String>? {
-            return when (versionCode) {
-                in 758..800 -> arrayOf(
-                    "com.qidian.QDReader.bll.splash.SplashManager",
-                    "k",
-                    "com.qidian.QDReader.ui.activity.SplashImageActivity",
-                    "onCreate",
-                    "btnSkip",
-                    "ivTop",
-                    "layoutShadow",
-                    "mGotoActivityShimmer",
-                    "start",
-                    "showSplashImage"
-                )
-                else -> null
-            }
-        }
-
-        /**
-         * 根据版本号获取是否启用隐藏底部小红点的类名方法名字段名数组
-         */
-        fun getIsEnableHideBottomRedDotClassNameAndMethodName(): Array<String>? {
-            return when (versionCode) {
-                in 758..760 -> arrayOf(
-                    "com.qidian.QDReader.ui.widget.maintab.a",
-                    "h"
-                )
-                768 -> arrayOf(
-                    "com.qidian.QDReader.ui.widget.maintab.e",
-                    "h"
-                )
-                else -> null
-            }
-        }
-
-        /**
-         * 根据版本号获取是否启用关闭青少年模式弹框的类名方法名字段名数组
-         */
-        fun getIsEnableCloseTeenagerModeClassNameAndMethodName(): Array<String>? {
-            return when (versionCode) {
-                in 758..800 -> arrayOf(
-                    "com.qidian.QDReader.bll.manager.QDTeenagerManager\$a",
-                    "getConfig",
-                    "com.qidian.QDReader.bll.manager.QDTeenagerManager",
-                    "isTeenLimitShouldShow",
-                    "judgeTeenUserTimeLimit\$lambda-3\$lambda-2",
-                    "com.qidian.QDReader.bll.helper.v1",
-                    "show"
-                )
-                else -> null
-            }
-        }
-    }
-
 
 }
 
@@ -688,14 +150,496 @@ fun printCallStack(className: String = "") {
 }
 
 /**
- * 数组拓展方法 如果不为空则运行 否则打印日志
+ * Hook 自动签到
  */
-fun <T> Array<T>?.runIfNotEmpty(block: (Array<T>) -> Unit) {
-    if (this.isNullOrEmpty()) {
-        loggerE(msg = "不支持的版本号为: ${HookEntry.versionCode}")
-    } else {
-        block(this)
+fun PackageParam.autoSignIn(versionCode: Int) {
+    if (prefs.getBoolean("isEnableAutoSign")) {
+        when (versionCode) {
+            in 758..772 -> {
+                if (prefs.getBoolean("isEnableOldLayout")) {
+                    findClass("com.qidian.QDReader.ui.view.bookshelfview.CheckInReadingTimeView").hook {
+                        injectMember {
+                            method {
+                                name = "S"
+                            }
+                            afterHook {
+                                val m = getView<TextView>(
+                                    instance, "m"
+                                )
+                                val l = getView<LinearLayout>(
+                                    instance, "l"
+                                )
+                                m?.let { mtv ->
+                                    if (mtv.text == "签到") {
+                                        l?.performClick()
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    findClass("com.qidian.QDReader.ui.view.bookshelfview.CheckInReadingTimeViewNew").hook {
+                        injectMember {
+                            method {
+                                name = "E"
+                            }
+                            afterHook {
+                                val s = getView<LinearLayout>(
+                                    instance, "s"
+                                )
+                                val qd = getParam<Any>(
+                                    instance, "e"
+                                )
+                                qd?.let { qdv ->
+                                    val e = getView<TextView>(
+                                        qdv, "e"
+                                    )
+                                    e?.let { etv ->
+                                        if (etv.text == "签到") {
+                                            s?.performClick()
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            else -> loggerE(msg = "自动签到不支持的版本号为: $versionCode")
+        }
     }
 }
+
+/**
+ * Hook 启用旧版布局
+ */
+fun PackageParam.enableOldLayout(versionCode: Int) {
+    if (prefs.getBoolean("isEnableOldLayout")) {
+        when (versionCode) {
+            in 758..800 -> {
+                findClass("com.qidian.QDReader.component.config.QDAppConfigHelper\$Companion").hook {
+                    injectMember {
+                        method {
+                            name = "getBookShelfNewStyle"
+                        }
+                        replaceToFalse()
+                    }
+                }
+            }
+            else -> loggerE(msg = "启用旧版布局不支持的版本号为: $versionCode")
+        }
+    }
+}
+
+/**
+ * Hook 启用本地至尊卡
+ */
+fun PackageParam.enableLocalCard(versionCode: Int) {
+    if (prefs.getBoolean("isEnableLocalCard")) {
+        when (versionCode) {
+            in 758..800 -> {
+
+                findClass("com.qidian.QDReader.repository.entity.UserAccountDataBean\$MemberBean").hook {
+                    injectMember {
+                        method {
+                            name = "getMemberType"
+                        }
+                        replaceTo(2)
+                    }
+
+                    injectMember {
+                        method {
+                            name = "getIsMember"
+                        }
+                        replaceTo(1)
+                    }
+                }
+            }
+            else -> loggerE(msg = "启用本地至尊卡不支持的版本号为: $versionCode")
+        }
+    }
+}
+
+/**
+ * Hook 移除书架右下角浮窗
+ */
+fun PackageParam.removeBookshelfFloatWindow(versionCode: Int) {
+    if (prefs.getBoolean("isEnableRemoveBookshelfFloat")) {
+        when (versionCode) {
+            in 758..768 -> {
+                findClass("com.qidian.QDReader.ui.fragment.QDBookShelfPagerFragment").hook {
+                    injectMember {
+                        method {
+                            name = "loadBookShelfAd"
+                        }
+                        intercept()
+                    }
+
+                    injectMember {
+                        method {
+                            name = "onViewInject"
+                            param(View::class.java)
+                        }
+                        afterHook {
+                            val imgAdIconClose = getView<ImageView>(
+                                instance, "imgAdIconClose"
+                            )
+                            imgAdIconClose?.visibility = View.GONE
+                            val layoutImgAdIcon = getView<LinearLayout>(
+                                instance, "layoutImgAdIcon"
+                            )
+                            layoutImgAdIcon?.visibility = View.GONE
+
+                            val imgBookShelfActivityIcon = getView<ImageView>(
+                                instance, "imgBookShelfActivityIcon"
+                            )
+                            imgBookShelfActivityIcon?.visibility = View.GONE
+                        }
+                    }
+                }
+            }
+            in 772..800 -> {
+                findClass("com.qidian.QDReader.ui.fragment.QDBookShelfPagerFragment").hook {
+                    injectMember {
+                        method {
+                            name = "loadBookShelfAd"
+                        }
+                        intercept()
+                    }
+
+                    injectMember {
+                        method {
+                            name = "showBookShelfHoverAd"
+                        }
+                        intercept()
+                    }
+
+                    injectMember {
+                        method {
+                            name = "onViewInject"
+                            param(View::class.java)
+                        }
+                        afterHook {
+                            val layoutImgAdIcon = getView<LinearLayout>(
+                                instance, "layoutImgAdIcon"
+                            )
+                            layoutImgAdIcon?.visibility = View.GONE
+                        }
+                    }
+
+                }
+            }
+            else -> {
+                loggerE(msg = "移除书架右下角浮窗不支持的版本号为: $versionCode")
+            }
+        }
+    }
+}
+
+/**
+ * Hook 移除底部导航栏中心广告
+ */
+fun PackageParam.removeBottomNavigationCenterAd(versionCode: Int) {
+    if (prefs.getBoolean("isEnableRemoveBookshelfBottomAd")) {
+        when (versionCode) {
+            in 758..800 -> {
+                findClass("com.qidian.QDReader.ui.activity.MainGroupActivity\$t").hook {
+                    injectMember {
+                        method {
+                            name = "c"
+                        }
+                        intercept()
+                    }
+                }
+            }
+            else -> loggerE(msg = "移除底部导航栏中心广告不支持的版本号为: $versionCode")
+        }
+    }
+}
+
+/**
+ * Hook 禁用广告
+ */
+fun PackageParam.disableAd(versionCode: Int) {
+    if (prefs.getBoolean("isEnableDisableAd")) {
+        when (versionCode) {
+            in 758..800 -> {
+                findClass("com.qq.e.comm.constants.CustomPkgConstants").hook {
+                    injectMember {
+                        method {
+                            name = "getAssetPluginName"
+                        }
+                        replaceTo("")
+                    }
+                }
+
+                findClass("com.qq.e.comm.b").hook {
+                    injectMember {
+                        method {
+                            name = "a"
+                        }
+                        intercept()
+                    }
+                }
+
+                findClass("com.qidian.QDReader.start.AsyncMainGDTTask").hook {
+                    injectMember {
+                        method {
+                            name = "create"
+                            returnType = StringType
+                        }
+                        intercept()
+                    }
+                }
+
+                findClass("com.qidian.QDReader.start.AsyncMainGameADSDKTask").hook {
+                    injectMember {
+                        method {
+                            name = "create"
+                            returnType = StringType
+                        }
+                        intercept()
+                    }
+                }
+            }
+            else -> loggerE(msg = "禁用广告不支持的版本号为: $versionCode")
+        }
+    }
+}
+
+/**
+ * Hook 闪屏页相关
+ */
+fun PackageParam.splashPage(versionCode: Int) {
+    if (prefs.getBoolean("isEnableSplash")) {
+        when (versionCode) {
+            in 758..800 -> {
+
+                findClass("com.qidian.QDReader.ui.activity.SplashImageActivity").hook {
+                    if (!prefs.getBoolean("isEnableCustomSplashImageShowAllButton")) {
+                        injectMember {
+                            method {
+                                name = "onCreate"
+                            }
+                            afterHook {
+                                val btnSkip = getView<Button>(instance, "btnSkip")
+                                btnSkip?.visibility = View.GONE
+                                val ivTop = getView<ImageView>(instance, "ivTop")
+                                ivTop?.visibility = View.GONE
+                                val layoutShadow =
+                                    getParam<RelativeLayout>(instance, "layoutShadow")
+                                layoutShadow?.visibility = View.GONE
+                                val mGotoActivityShimmer =
+                                    getView<FrameLayout>(instance, "mGotoActivityShimmer")
+                                mGotoActivityShimmer?.visibility = View.GONE
+                            }
+                        }
+                    }
+                    injectMember {
+                        method {
+                            name = "start"
+                            param(
+                                "com.qidian.QDReader.ui.activity.SplashActivity".clazz,
+                                StringType,
+                                StringType,
+                                LongType,
+                                IntType
+                            )
+                        }
+
+                        beforeHook {
+                            val customSplashImageFilePath =
+                                prefs.getString("customSplashImageFilePath")
+                            if (customSplashImageFilePath.isNotBlank()) {
+                                args(index = 1).set(customSplashImageFilePath)
+                            }
+                            val customBookId = prefs.getString("customBookId")
+                            if (customBookId.isNotBlank()) {
+                                args(index = 2).set("QDReader://ShowBook/$customBookId")
+                            }
+
+                            args(index = 4).set(prefs.getInt("customSplashImageType", 0))
+                        }
+
+                        afterHook {
+                            // 打印传入的参数
+                            //loggerE(msg = " \nargs[1]: ${args[1] as String} \nargs[2]: ${args[2] as String} \nargs[3]: ${args[3] as Long} \nargs[4]: ${args[4] as Int}")
+                        }
+
+
+                    }
+                }
+
+
+            }
+            else -> loggerE(msg = "闪屏页不支持的版本号为: $versionCode")
+        }
+    } else {
+        when (versionCode) {
+            in 758..800 -> {
+                findClass("com.qidian.QDReader.bll.splash.SplashManager").hook {
+                    injectMember {
+                        method {
+                            name = "k"
+                        }
+                        intercept()
+                    }
+                }
+
+                findClass("com.qidian.QDReader.ui.activity.SplashImageActivity").hook {
+                    injectMember {
+                        method {
+                            name = "showSplashImage"
+                            param(StringType)
+                        }
+                        afterHook {
+                            val mSplashHelper = getParam<Any>(instance, "mSplashHelper")
+                            mSplashHelper?.current {
+                                method {
+                                    name = "e"
+                                }.call()
+
+                            }
+                        }
+                    }
+                }
+            }
+            else -> loggerE(msg = "闪屏页不支持的版本号为: $versionCode")
+
+        }
+    }
+}
+
+/**
+ * Hook 启用隐藏底部小红点
+ */
+fun PackageParam.hideBottomRedDot(versionCode: Int) {
+    if (prefs.getBoolean("isEnableHideBottomDot")) {
+        when (versionCode) {
+            in 758..768 -> {
+                findClass("com.qidian.QDReader.ui.widget.maintab.a").hook {
+                    injectMember {
+                        method {
+                            name = "h"
+                            returnType = IntType
+                        }
+                        replaceTo(1)
+                    }
+                }
+            }
+            in 772..800 -> {
+                findClass("com.qidian.QDReader.ui.widget.maintab.e").hook {
+                    injectMember {
+                        method {
+                            name = "h"
+                            returnType = IntType
+                        }
+                        replaceTo(1)
+                    }
+                }
+            }
+            else -> loggerE(msg = "隐藏底部小红点不支持的版本号为: $versionCode")
+        }
+    }
+}
+
+/**
+ * 移除青少年模式弹框
+ */
+fun PackageParam.removeQSNYDialog(versionCode: Int) {
+    if (prefs.getBoolean("isEnableCloseQSNModeDialog")) {
+        when (versionCode) {
+            in 758..768 -> {
+                findClass("com.qidian.QDReader.bll.manager.QDTeenagerManager\$a").hook {
+                    injectMember {
+                        method {
+                            name = "getConfig"
+                            superClass()
+                        }
+                        intercept()
+                    }
+                }
+
+                findClass("com.qidian.QDReader.bll.manager.QDTeenagerManager").hook {
+                    injectMember {
+                        method {
+                            name = "isTeenLimitShouldShow"
+                            param(IntType)
+                            returnType = BooleanType
+                        }
+                        replaceToFalse()
+                    }
+
+                    injectMember {
+                        method {
+                            name = "judgeTeenUserTimeLimit\$lambda-3\$lambda-2"
+                            param(ActivityClass)
+                            returnType = UnitType
+                        }
+                        intercept()
+                    }
+                }
+
+                findClass("com.qidian.QDReader.bll.helper.v1").hook {
+                    injectMember {
+                        method {
+                            name = "show"
+                            superClass()
+                        }
+                        intercept()
+                    }
+                }
+
+            }
+            in 772..800 ->{
+                findClass("com.qidian.QDReader.bll.manager.QDTeenagerManager\$b").hook {
+                    injectMember {
+                        method {
+                            name = "getConfig"
+                            superClass()
+                        }
+                        intercept()
+                    }
+                }
+
+                findClass("com.qidian.QDReader.bll.manager.QDTeenagerManager").hook {
+                    injectMember {
+                        method {
+                            name = "isTeenLimitShouldShow"
+                            param(IntType)
+                            returnType = BooleanType
+                        }
+                        replaceToFalse()
+                    }
+
+                    injectMember {
+                        method {
+                            name = "judgeTeenUserTimeLimit\$lambda-3\$lambda-2"
+                            param(ActivityClass)
+                            returnType = UnitType
+                        }
+                        intercept()
+                    }
+                }
+
+                findClass("com.qidian.QDReader.bll.helper.z1").hook {
+                    injectMember {
+                        method {
+                            name = "show"
+                            superClass()
+                        }
+                        intercept()
+                    }
+                }
+
+            }
+            else -> loggerE(msg = "移除青少年模式弹框不支持的版本号为: $versionCode")
+        }
+    }
+}
+
+
+
+
 
 
