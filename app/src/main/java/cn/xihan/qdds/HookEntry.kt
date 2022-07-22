@@ -188,7 +188,7 @@ fun PackageParam.autoSignIn(versionCode: Int) {
                                     instance, "s"
                                 )
                                 val qd = getParam<Any>(
-                                    instance, "e"
+                                    instance, "s"
                                 )
                                 qd?.let { qdv ->
                                     val e = getView<TextView>(
@@ -550,16 +550,6 @@ fun PackageParam.removeQSNYDialog(versionCode: Int) {
     if (prefs.getBoolean("isEnableCloseQSNModeDialog")) {
         when (versionCode) {
             in 758..768 -> {
-                findClass("com.qidian.QDReader.bll.manager.QDTeenagerManager\$a").hook {
-                    injectMember {
-                        method {
-                            name = "getConfig"
-                            superClass()
-                        }
-                        intercept()
-                    }
-                }
-
                 findClass("com.qidian.QDReader.bll.manager.QDTeenagerManager").hook {
                     injectMember {
                         method {
@@ -592,16 +582,6 @@ fun PackageParam.removeQSNYDialog(versionCode: Int) {
 
             }
             in 772..800 ->{
-                findClass("com.qidian.QDReader.bll.manager.QDTeenagerManager\$b").hook {
-                    injectMember {
-                        method {
-                            name = "getConfig"
-                            superClass()
-                        }
-                        intercept()
-                    }
-                }
-
                 findClass("com.qidian.QDReader.bll.manager.QDTeenagerManager").hook {
                     injectMember {
                         method {
@@ -619,6 +599,10 @@ fun PackageParam.removeQSNYDialog(versionCode: Int) {
                             returnType = UnitType
                         }
                         intercept()
+                    }
+
+                    injectMember {
+
                     }
                 }
 
