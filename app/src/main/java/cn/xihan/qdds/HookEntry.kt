@@ -155,7 +155,7 @@ fun printCallStack(className: String = "") {
 fun PackageParam.autoSignIn(versionCode: Int) {
     if (prefs.getBoolean("isEnableAutoSign")) {
         when (versionCode) {
-            in 758..772 -> {
+            in 758..776 -> {
                 if (prefs.getBoolean("isEnableOldLayout")) {
                     findClass("com.qidian.QDReader.ui.view.bookshelfview.CheckInReadingTimeView").hook {
                         injectMember {
@@ -548,77 +548,40 @@ fun PackageParam.hideBottomRedDot(versionCode: Int) {
  */
 fun PackageParam.removeQSNYDialog(versionCode: Int) {
     if (prefs.getBoolean("isEnableCloseQSNModeDialog")) {
-        when (versionCode) {
-            in 758..768 -> {
-                findClass("com.qidian.QDReader.bll.manager.QDTeenagerManager").hook {
-                    injectMember {
-                        method {
-                            name = "isTeenLimitShouldShow"
-                            param(IntType)
-                            returnType = BooleanType
-                        }
-                        replaceToFalse()
-                    }
-
-                    injectMember {
-                        method {
-                            name = "judgeTeenUserTimeLimit\$lambda-3\$lambda-2"
-                            param(ActivityClass)
-                            returnType = UnitType
-                        }
-                        intercept()
-                    }
+        findClass("com.qidian.QDReader.bll.manager.QDTeenagerManager").hook {
+            injectMember {
+                method {
+                    name = "isTeenLimitShouldShow"
+                    param(IntType)
+                    returnType = BooleanType
                 }
-
-                findClass("com.qidian.QDReader.bll.helper.v1").hook {
-                    injectMember {
-                        method {
-                            name = "show"
-                            superClass()
-                        }
-                        intercept()
-                    }
-                }
-
+                replaceToFalse()
             }
-            in 772..800 ->{
-                findClass("com.qidian.QDReader.bll.manager.QDTeenagerManager").hook {
-                    injectMember {
-                        method {
-                            name = "isTeenLimitShouldShow"
-                            param(IntType)
-                            returnType = BooleanType
-                        }
-                        replaceToFalse()
-                    }
 
-                    injectMember {
-                        method {
-                            name = "judgeTeenUserTimeLimit\$lambda-3\$lambda-2"
-                            param(ActivityClass)
-                            returnType = UnitType
-                        }
-                        intercept()
-                    }
-
-                    injectMember {
-
-                    }
+            injectMember {
+                method {
+                    name = "judgeTeenUserTimeLimit\$lambda-3\$lambda-2"
+                    param(ActivityClass)
+                    returnType = UnitType
                 }
-
-                findClass("com.qidian.QDReader.bll.helper.z1").hook {
-                    injectMember {
-                        method {
-                            name = "show"
-                            superClass()
-                        }
-                        intercept()
-                    }
-                }
-
+                intercept()
             }
-            else -> loggerE(msg = "移除青少年模式弹框不支持的版本号为: $versionCode")
         }
+        val dialogClassName: String? = when (versionCode) {
+            in 758..768 -> "com.qidian.QDReader.bll.helper.v1"
+            772 -> "com.qidian.QDReader.bll.helper.w1"
+            776 -> "com.qidian.QDReader.bll.helper.t1"
+            else -> null
+        }
+        dialogClassName?.hook {
+            injectMember {
+                method {
+                    name = "show"
+                    superClass()
+                }
+                intercept()
+            }
+        } ?: loggerE(msg = "移除青少年模式弹框不支持的版本号为: $versionCode")
     }
 }
 

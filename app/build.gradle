@@ -93,7 +93,7 @@ android {
 
     // 启用ViewBinding
     buildFeatures {
-        viewBinding  = true
+        viewBinding = true
     }
 
 
