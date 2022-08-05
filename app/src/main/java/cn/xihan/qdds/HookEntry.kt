@@ -155,7 +155,7 @@ fun printCallStack(className: String = "") {
 fun PackageParam.autoSignIn(versionCode: Int) {
     if (prefs.getBoolean("isEnableAutoSign")) {
         when (versionCode) {
-            in 758..776 -> {
+            in 758..780 -> {
                 if (prefs.getBoolean("isEnableOldLayout")) {
                     findClass("com.qidian.QDReader.ui.view.bookshelfview.CheckInReadingTimeView").hook {
                         injectMember {
@@ -570,7 +570,7 @@ fun PackageParam.removeQSNYDialog(versionCode: Int) {
         val dialogClassName: String? = when (versionCode) {
             in 758..768 -> "com.qidian.QDReader.bll.helper.v1"
             772 -> "com.qidian.QDReader.bll.helper.w1"
-            776 -> "com.qidian.QDReader.bll.helper.t1"
+            in 776..780 -> "com.qidian.QDReader.bll.helper.t1"
             else -> null
         }
         dialogClassName?.hook {
