@@ -12,6 +12,10 @@
             app:title="@string/sw_bottom_ad" />
 
         <SwitchPreferenceCompat
+            app:key="isEnableRemoveUpdate"
+            app:title="@string/sw_remove_update" />
+
+        <SwitchPreferenceCompat
             app:key="isEnableDisableAd"
             app:title="@string/sw_disable_ad" />
 

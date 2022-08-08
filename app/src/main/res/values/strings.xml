@@ -45,6 +45,7 @@
     <string name="custom_book_detail">闪屏页自定义跳转到指定书详情页</string>
     <!--自定义跳转到指定书详情页说明-->
     <string name="custom_book_detail_hint">填入书籍的BookId,详情页分享链接里面"bookid="后面到"&amp;"前那串数字就是了</string>
+    <string name="sw_remove_update">禁用检查更新</string>
 
 
 </resources>
