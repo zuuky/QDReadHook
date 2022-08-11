@@ -181,7 +181,7 @@ fun PackageParam.autoSignIn(versionCode: Int) {
  */
 fun PackageParam.oldAutoSignIn(versionCode: Int) {
     when (versionCode) {
-        in 758..780 -> {
+        in 758..784 -> {
             findClass("com.qidian.QDReader.ui.view.bookshelfview.CheckInReadingTimeView").hook {
                 injectMember {
                     method {
@@ -212,7 +212,7 @@ fun PackageParam.oldAutoSignIn(versionCode: Int) {
  */
 fun PackageParam.newAutoSignIn(versionCode: Int) {
     when (versionCode) {
-        in 758..780 -> {
+        in 758..784 -> {
             findClass("com.qidian.QDReader.ui.view.bookshelfview.CheckInReadingTimeViewNew").hook {
                 injectMember {
                     method {
@@ -247,7 +247,6 @@ fun PackageParam.newAutoSignIn(versionCode: Int) {
  * Hook 启用旧版布局
  */
 fun PackageParam.enableOldLayout(versionCode: Int) {
-
     when (versionCode) {
         in 758..800 -> {
             findClass("com.qidian.QDReader.component.config.QDAppConfigHelper\$Companion").hook {
@@ -261,7 +260,6 @@ fun PackageParam.enableOldLayout(versionCode: Int) {
         }
         else -> loggerE(msg = "启用旧版布局不支持的版本号为: $versionCode")
     }
-
 }
 
 /**
@@ -371,7 +369,6 @@ fun PackageParam.removeBookshelfFloatWindow(versionCode: Int) {
  * Hook 移除底部导航栏中心广告
  */
 fun PackageParam.removeBottomNavigationCenterAd(versionCode: Int) {
-
     when (versionCode) {
         in 758..800 -> {
             findClass("com.qidian.QDReader.ui.activity.MainGroupActivity\$t").hook {
@@ -385,14 +382,12 @@ fun PackageParam.removeBottomNavigationCenterAd(versionCode: Int) {
         }
         else -> loggerE(msg = "移除底部导航栏中心广告不支持的版本号为: $versionCode")
     }
-
 }
 
 /**
  * Hook 禁用广告
  */
 fun PackageParam.disableAd(versionCode: Int) {
-
     when (versionCode) {
         in 758..800 -> {
             findClass("com.qq.e.comm.constants.CustomPkgConstants").hook {
@@ -435,7 +430,6 @@ fun PackageParam.disableAd(versionCode: Int) {
         }
         else -> loggerE(msg = "禁用广告不支持的版本号为: $versionCode")
     }
-
 }
 
 /**
@@ -608,7 +602,7 @@ fun PackageParam.removeQSNYDialog(versionCode: Int) {
     val dialogClassName: String? = when (versionCode) {
         in 758..768 -> "com.qidian.QDReader.bll.helper.v1"
         772 -> "com.qidian.QDReader.bll.helper.w1"
-        in 776..780 -> "com.qidian.QDReader.bll.helper.t1"
+        in 776..784 -> "com.qidian.QDReader.bll.helper.t1"
         else -> null
     }
     dialogClassName?.hook {
@@ -627,7 +621,7 @@ fun PackageParam.removeQSNYDialog(versionCode: Int) {
  */
 fun PackageParam.removeUpdate(versionCode: Int) {
     when (versionCode) {
-        in 758..780 -> {
+        in 758..784 -> {
 
             findClass("w4.h").hook {
                 injectMember {

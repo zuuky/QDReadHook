@@ -4,7 +4,6 @@
     <PreferenceCategory app:title="@string/main_title">
 
         <EditTextPreference
-            android:defaultValue="com.qidian.QDReader"
             app:defaultValue="com.qidian.QDReader"
             app:key="packageName"
             app:title="@string/packageName"
@@ -12,7 +11,6 @@
 
 
     </PreferenceCategory>
-
 
 
     <PreferenceCategory app:title="@string/function">
@@ -36,6 +34,20 @@
         <SwitchPreferenceCompat
             app:key="isEnableCloseQSNModeDialog"
             app:title="@string/sw_close_qingshaonian_mode" />
+
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/other">
+
+        <!--打开网页-->
+        <Preference
+            app:key="pref_app_source"
+            app:title="@string/open_source_address">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="@string/url" />
+        </Preference>
 
 
     </PreferenceCategory>

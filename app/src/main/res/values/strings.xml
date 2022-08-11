@@ -16,6 +16,12 @@
     <string name="sw_hide_bottom_dot">启用隐藏底部小红点</string>
     <!--启用关闭青少年模式弹框-->
     <string name="sw_close_qingshaonian_mode">启用关闭青少年模式弹框</string>
+    <!--其他-->
+    <string name="other">其他</string>
+    <!--开源地址-->
+    <string name="open_source_address">开源地址</string>
+    <!--开源地址Url-->
+    <string name="url">https://github.com/xihan123/QDReadHook</string>
 
 
     <!--广告相关-->
