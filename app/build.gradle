@@ -4,22 +4,18 @@ plugins {
     id 'com.google.devtools.ksp'
 }
 
-def keystorePropertiesFile = rootProject.file("keystore.properties")
-def keystoreProperties = new Properties()
-keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-
 android {
     namespace 'cn.xihan.qdds'
     compileSdk rootProject.targetSdkVersion
 
     signingConfigs {
         xihantest {
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
-            storeFile file(keystoreProperties['storeFile'])
-            storePassword keystoreProperties['storePassword']
-            enableV3Signing true
-            enableV4Signing true
+            keyAlias 'pobo'
+            keyPassword '123456'
+            storeFile file('pose.keystore')
+            storePassword '123456'
+            v1SigningEnabled true
+            v2SigningEnabled true
         }
     }
 
@@ -30,12 +26,9 @@ android {
         targetSdk rootProject.targetSdkVersion
         versionCode rootProject.appVersionCode
         versionName rootProject.appVersionName
-
         // 仅保留中文语种的资源
         resConfigs 'zh'
-
         signingConfig signingConfigs.xihantest
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -75,9 +68,7 @@ android {
     }
 
     packagingOptions {
-
         resources {
-
             excludes += "META-INF/*******"
             excludes += "**/*.txt"
             excludes += "**/*.xml"
@@ -85,18 +76,15 @@ android {
             excludes += "DebugProbesKt.bin"
             excludes += "kotlin-tooling-metadata.json"
         }
-
         dex {
             useLegacyPackaging true
         }
     }
-
     // 启用ViewBinding
     buildFeatures {
         viewBinding = true
     }
-
-
+    ndkVersion '21.3.6528147'
 }
 
 dependencies {
@@ -105,7 +93,6 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$appcompatVersion"
     implementation "com.google.android.material:material:$materialVersion"
     implementation 'androidx.preference:preference-ktx:1.2.0'
-
     // 基础依赖
     implementation "com.highcapable.yukihookapi:api:$YuKiHookVersion"
     // ❗作为 Xposed 模块使用务必添加，其它情况可选

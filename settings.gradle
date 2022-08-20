@@ -1,7 +1,7 @@
 pluginManagement {
     repositories {
-        gradlePluginPortal()
         google()
+        gradlePluginPortal()
         mavenCentral()
     }
 }
@@ -13,6 +13,7 @@ dependencyResolutionManagement {
         maven { url 'https://jitpack.io' }
         maven { url "https://api.xposed.info/" }
         maven { url "https://s01.oss.sonatype.org/content/repositories/releases" }
+        maven { url "https://maven.aliyun.com/nexus/content/repositories/jcenter" }
     }
 }
 rootProject.name = "QDReadHook"
